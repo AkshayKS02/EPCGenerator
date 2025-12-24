@@ -1,8 +1,8 @@
 package engine;
 
-import model.HomeData;
 import java.util.ArrayList;
 import java.util.List;
+import models.HomeData;
 
 public class RecommendationEngine {
 
