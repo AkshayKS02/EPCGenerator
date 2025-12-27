@@ -6,33 +6,34 @@ import models.HomeData;
 
 public class RecommendationEngine {
 
-    // ✅ Public API – single entry point
+    // Single entry point
     public List<String> generateRecommendations(HomeData home) {
 
-        List<String> recommendations = new ArrayList<>();
+        List<String> rec = new ArrayList<>();
 
-        checkLighting(home, recommendations);
-        checkWindows(home, recommendations);
-        checkInsulation(home, recommendations);
-        checkCooling(home, recommendations);
-        checkAppliances(home, recommendations);
-        checkVentilation(home, recommendations);
+        checkLighting(home, rec);
+        checkWindows(home, rec);
+        checkInsulationDerived(home, rec);
+        checkCooling(home, rec);
+        checkAppliances(home, rec);
+        checkVentilationDerived(home, rec);
+        checkHouseType(home, rec);
 
-        if (recommendations.isEmpty()) {
-            recommendations.add(
-                "Your home already follows good energy-efficient practices. " +
+        if (rec.isEmpty()) {
+            rec.add(
+                "Your building already follows good energy-efficient practices. " +
                 "Continue regular maintenance to retain performance."
             );
         }
 
-        return recommendations;
+        return rec;
     }
 
-    // ----------- Individual Rule Checks -----------
+    // -------- RULE CHECKS --------
 
     private void checkLighting(HomeData home, List<String> rec) {
         if (!home.lighting.equalsIgnoreCase("LED")) {
-            rec.add("Upgrade to LED lighting to reduce electricity consumption by up to 80%.");
+            rec.add("Upgrade to LED lighting to significantly reduce electricity consumption.");
         }
     }
 
@@ -42,10 +43,13 @@ public class RecommendationEngine {
         }
     }
 
-    private void checkInsulation(HomeData home, List<String> rec) {
-        if (home.insulation.equalsIgnoreCase("Poor") ||
-            home.insulation.equalsIgnoreCase("None")) {
-            rec.add("Improve wall and roof insulation to maintain indoor temperature naturally.");
+    // Insulation derived from wall + windows
+    private void checkInsulationDerived(HomeData home, List<String> rec) {
+        if (home.wallType.equalsIgnoreCase("Glass") ||
+            home.wallType.equalsIgnoreCase("Brick") &&
+            home.windows.equalsIgnoreCase("Single Glazed")) {
+
+            rec.add("Improve wall insulation and upgrade windows to maintain indoor temperature efficiently.");
         }
     }
 
@@ -57,13 +61,20 @@ public class RecommendationEngine {
 
     private void checkAppliances(HomeData home, List<String> rec) {
         if (home.applianceAge > 8) {
-            rec.add("Replace appliances older than 8 years with energy-efficient alternatives.");
+            rec.add("Replace old appliances with modern energy-efficient alternatives.");
         }
     }
 
-    private void checkVentilation(HomeData home, List<String> rec) {
-        if (home.ventilation.equalsIgnoreCase("Poor")) {
-            rec.add("Improve natural ventilation to reduce dependency on artificial cooling.");
+    // Ventilation derived from system
+    private void checkVentilationDerived(HomeData home, List<String> rec) {
+        if (home.ventilationSystem.equalsIgnoreCase("Centralized HVAC")) {
+            rec.add("Improve natural ventilation to reduce dependency on centralized HVAC systems.");
+        }
+    }
+
+    private void checkHouseType(HomeData home, List<String> rec) {
+        if (home.houseType.equalsIgnoreCase("Commercial")) {
+            rec.add("Consider energy audits and smart energy management systems for commercial buildings.");
         }
     }
 }
