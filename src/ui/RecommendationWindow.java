@@ -1,11 +1,16 @@
-
-import models.HomeData;
-import javax.swing.*;
+package ui;
+import engine.RecommendationEngine;
 import java.awt.*;
+import java.util.List;
+import javax.swing.*;
+import models.HomeData;
 
 public class RecommendationWindow {
 
-    public static void show(HomeData data, String recommendations) {
+    public RecommendationWindow(HomeData home) {
+
+        RecommendationEngine engine = new RecommendationEngine();
+        List<String> recs = engine.generateRecommendations(home);
 
         JFrame frame = new JFrame("Energy Recommendations");
         frame.setSize(550, 500);
@@ -26,7 +31,7 @@ public class RecommendationWindow {
 
         JLabel title = new JLabel("RECOMMENDATIONS", JLabel.CENTER);
         title.setFont(new Font("Serif", Font.BOLD, 22));
-        title.setForeground(new Color(15, 35, 70)); // dark navy
+        title.setForeground(new Color(15, 35, 70));
         title.setBorder(BorderFactory.createEmptyBorder(10, 10, 20, 10));
 
         JTextArea textArea = new JTextArea();
@@ -36,7 +41,12 @@ public class RecommendationWindow {
         textArea.setBackground(Color.WHITE);
         textArea.setLineWrap(true);
         textArea.setWrapStyleWord(true);
-        textArea.setText(recommendations);
+
+        StringBuilder sb = new StringBuilder();
+        for (String r : recs) {
+            sb.append("• ").append(r).append("\n\n");
+        }  
+        textArea.setText(sb.toString());
 
         JScrollPane scroll = new JScrollPane(textArea);
         scroll.setBorder(BorderFactory.createEmptyBorder());

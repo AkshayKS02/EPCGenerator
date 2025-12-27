@@ -1,9 +1,8 @@
 import java.awt.*;
 import javax.swing.*;
-
 import models.HomeData;
-import engine.ScoringEngine;
-import engine.RecommendationEngine;
+import ui.RecommendationWindow;
+import ui.CertificateWindow;
 
 public class Main {
 
@@ -81,15 +80,7 @@ public class Main {
                         heating, applianceAge
                 );
 
-                int score = ScoringEngine.calculateScore(home);
-                char grade = ScoringEngine.getGrade(score);
-
-                JOptionPane.showMessageDialog(
-                        frame,
-                        "EPC SCORE: " + score + "\nEPC GRADE: " + grade,
-                        "Energy Performance Certificate",
-                        JOptionPane.INFORMATION_MESSAGE
-                );
+                new CertificateWindow(home);
 
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(frame, ex.getMessage());
@@ -105,20 +96,13 @@ public class Main {
                         heating, applianceAge
                 );
 
-                RecommendationEngine engine = new RecommendationEngine();
-                java.util.List<String> recs = engine.generateRecommendations(home);
-
-                JOptionPane.showMessageDialog(
-                        frame,
-                        String.join("\n\n", recs),
-                        "Energy Saving Recommendations",
-                        JOptionPane.INFORMATION_MESSAGE
-                );
+                new RecommendationWindow(home);
 
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(frame, ex.getMessage());
             }
         });
+
 
         mainPanel.add(formPanel, BorderLayout.CENTER);
         mainPanel.add(buttonPanel, BorderLayout.SOUTH);
